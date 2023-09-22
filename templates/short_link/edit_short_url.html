@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h1>Edit Short URL</h1>
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="original_url" class="form-label">Original URL:</label>
+            <input type="url" class="form-control" id="original_url" name="original_url" value="{{ short_url.original_url }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="expiry_date" class="form-label">Link Expiry Date:</label>
+            <input type="datetime-local" class="form-control" id="expiry_date" name="expiry_date" value="{{ short_url.expiry_date|date:'Y-m-d\TH:i' }}">
+            <small class="form-text text-muted">Enter date and time in YYYY-MM-DDTHH:mm format.</small>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password:</label>
+            <input type="text" class="form-control" id="password" name="password" value="{{ short_url.password }}">
+            <small class="form-text text-muted">Password protection (optional).</small>
+        </div>
+
+        
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="enableLocation" name="{{ form.accurate_location_tracking.name }}" {% if short_url.accurate_location_tracking %}checked{% endif %}>
+            <label class="form-check-label" for="enableLocation">Enable Accurate Location Tracking</label>
+        </div>
+        
+        
+
+
+        <div class="mb-3">
+            <label for="custom_note" class="form-label">Custom Note:</label>
+            <input type="text" class="form-control" id="custom_note" name="custom_note" value="{{ short_url.custom_note }}">
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary mr-2">Save Changes</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='/list/'">Cancel</button>
+            
+            <button type="button" class="btn btn-danger ml-2" onclick="window.location.href='/deactivate/{{ short_url.short_code }}/'">Delete</button>      
+        </div>
+
+        
+    </form>
+</div>
+{% endblock %}

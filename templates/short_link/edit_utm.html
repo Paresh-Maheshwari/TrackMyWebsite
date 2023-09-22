@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h1 class="card-title">Edit Short URL and UTM Parameters</h1>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        
+        <!-- Short URL Edit Fields -->
+        <div class="mb-3">
+          <label for="original_url" class="form-label">Original URL:</label>
+         
+            <input type="text" class="form-control" id="original_url" name="original_url" value="{{ short_url.original_url }}" readonly>
+        </div>
+        
+        <!-- UTM Edit Fields -->
+        <div class="mb-3">
+          <label for="{{ utm_form.utm_source.id_for_label }}" class="form-label">{{ utm_form.utm_source.label }}</label>
+          <input type="text" class="form-control" id="{{ utm_form.utm_source.id_for_label }}" name="{{ utm_form.utm_source.html_name }}" value="{{ utm_form.utm_source.value }}">
+        </div>
+        
+        <div class="mb-3">
+          <label for="{{ utm_form.utm_medium.id_for_label }}" class="form-label">{{ utm_form.utm_medium.label }}</label>
+          <input type="text" class="form-control" id="{{ utm_form.utm_medium.id_for_label }}" name="{{ utm_form.utm_medium.html_name }}" value="{{ utm_form.utm_medium.value }}">
+        </div>
+        
+        <div class="mb-3">
+          <label for="{{ utm_form.utm_campaign.id_for_label }}" class="form-label">{{ utm_form.utm_campaign.label }}</label>
+          <input type="text" class="form-control" id="{{ utm_form.utm_campaign.id_for_label }}" name="{{ utm_form.utm_campaign.html_name }}" value="{{ utm_form.utm_campaign.value }}">
+        </div>
+        
+        <div class="mb-3">
+          <label for="{{ utm_form.utm_content.id_for_label }}" class="form-label">{{ utm_form.utm_content.label }}</label>
+          <input type="text" class="form-control" id="{{ utm_form.utm_content.id_for_label }}" name="{{ utm_form.utm_content.html_name }}" value="{{ utm_form.utm_content.value }}">
+        </div>
+        
+        <div class="mb-3">
+          <label for="{{ utm_form.utm_term.id_for_label }}" class="form-label">{{ utm_form.utm_term.label }}</label>
+          <input type="text" class="form-control" id="{{ utm_form.utm_term.id_for_label }}" name="{{ utm_form.utm_term.html_name }}" value="{{ utm_form.utm_term.value }}">
+        </div>
+        
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary mr-2">Save Changes</button>
+          <a href="{% url 'short_url_list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

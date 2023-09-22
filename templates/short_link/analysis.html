@@ -1,0 +1,226 @@
+{% extends 'base.html' %} {% block content %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Analysis Page for Short URL: {{ short_url.short_code }}</h1>
+    <style>
+      .chart {
+        width: 100%;
+        height: 300px;
+      }
+    </style>
+  
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+              <span>Clicks by Date</span>
+              <a href="#" class="btn btn-primary btn-sm" id="downloadClicksByDateChart">
+                Download Chart<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download ml-2" viewBox="0 0 16 16">
+                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path>
+                  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            <canvas id="clicksByDateChart" class="chart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+              <span>Visits by Country</span>
+              <a href="#" class="btn btn-primary btn-sm" id="downloadCountryChart">
+                Download Chart<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download ml-2" viewBox="0 0 16 16">
+                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path>
+                  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            <canvas id="countryChart" class="chart"></canvas>
+          </div>
+        </div>
+      </div>
+      <!-- ... Previous code ... -->
+
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header bg-success text-white">
+            <div class="d-flex justify-content-between align-items-center">
+              <span>Visits by Platform</span>
+              <a href="#" class="btn btn-success btn-sm" id="downloadPlatformChart">
+                Download Chart<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download ml-2" viewBox="0 0 16 16">
+                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path>
+                  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            <canvas id="platformChart" class="chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header bg-info text-white">
+            <div class="d-flex justify-content-between align-items-center">
+              <span>Visits by Browser</span>
+              <a href="#" class="btn btn-info btn-sm" id="downloadBrowserChart">
+                Download Chart<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download ml-2" viewBox="0 0 16 16">
+                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path>
+                  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            <canvas id="browserChart" class="chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+      // Data from Django view
+      var countries = {{ countries|safe }};
+      var browsers = {{ browsers|safe }};
+      var platforms = {{ platforms|safe }};
+      var dateLabels = {{ date_labels|safe }};
+      var dateCounts = {{ date_counts|safe }};
+
+
+      var clicksByDateChart = new Chart(document.getElementById('clicksByDateChart'), {
+        type: 'bar',
+        data: {
+            labels: dateLabels,
+            datasets: [{
+                label: 'Total Clicks by Date',
+                data: dateCounts,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+      var countryChart = new Chart(document.getElementById('countryChart'), {
+          type: 'bar',
+          data: {
+              labels: Object.keys(countries),
+              datasets: [{
+                  label: 'Visits by Country',
+                  data: Object.values(countries),
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              }
+          }
+      });
+
+      var browserChart = new Chart(document.getElementById('browserChart'), {
+          type: 'pie',
+          data: {
+              labels: Object.keys(browsers),
+              datasets: [{
+                  data: Object.values(browsers),
+                  backgroundColor: ['#00876c', '#6aaa96', '#aecdc2', '#f1f1f1', '#f0b8b8', '#6aaa96', '#aecdc2', '#f1f1f1', '#f0b8b8'],
+                  borderWidth: 1
+              }]
+          }
+      });
+      var platformChart = new Chart(document.getElementById('platformChart'), {
+          type: 'doughnut',
+          data: {
+              labels: Object.keys(platforms),
+              datasets: [{
+                  data: Object.values(platforms),
+                  backgroundColor: ['#96ceb4', '#ffeead', '#ff6f69', '#ffcc5c', '#88d8b0'],
+                  borderWidth: 1
+              }]
+          }
+      });
+  </script>
+
+  <script>
+    // ... Chart generation code
+
+    // Add event listener to download button for platform chart
+    document
+      .getElementById("downloadPlatformChart")
+      .addEventListener("click", function () {
+        var chartCanvas = document.getElementById("platformChart");
+        var chartImage = chartCanvas.toDataURL("image/png");
+
+        // Create a temporary link and trigger download
+        var link = document.createElement("a");
+        link.href = chartImage;
+        link.download = "platform_chart.png";
+        link.click();
+      });
+
+    // Add event listener to download button for browser chart
+    document
+      .getElementById("downloadBrowserChart")
+      .addEventListener("click", function () {
+        var chartCanvas = document.getElementById("browserChart");
+        var chartImage = chartCanvas.toDataURL("image/png");
+
+        // Create a temporary link and trigger download
+        var link = document.createElement("a");
+        link.href = chartImage;
+        link.download = "browser_chart.png";
+        link.click();
+      });
+
+    // Add event listener to download button for country chart
+    document
+      .getElementById("downloadCountryChart")
+      .addEventListener("click", function () {
+        var chartCanvas = document.getElementById("countryChart");
+        var chartImage = chartCanvas.toDataURL("image/png");
+
+        // Create a temporary link and trigger download
+        var link = document.createElement("a");
+        link.href = chartImage;
+        link.download = "country_chart.png";
+        link.click();
+      });
+
+    // Add event listener to download button for clicks by date chart
+    document
+      .getElementById("downloadClicksByDateChart")
+      .addEventListener("click", function () {
+        var chartCanvas = document.getElementById("clicksByDateChart");
+        var chartImage = chartCanvas.toDataURL("image/png");
+
+        // Create a temporary link and trigger download
+        var link = document.createElement("a");
+        link.href = chartImage;
+        link.download = "clicks_by_date_chart.png";
+        link.click();
+      });
+  </script>
+
+  <!-- Add this within the <script> tag in your analysis.html template -->
+{% endblock %}

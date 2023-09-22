@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Permission</title>
+    <link rel="stylesheet" href="{% static "css/styles.min.css" %}">
+    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css" %}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Short URL Service</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="text-center">
+            <h1>Location Permission</h1>
+        </div>
+        
+        {% if short_url.accurate_location_tracking %}
+        <div class="alert alert-info mt-4">
+            This short URL requires accurate location tracking. Please allow access to your location.
+        </div>
+        <form method="POST" action="{% url 'send_location' short_url.short_code %}">
+            {% csrf_token %}
+            <div class="text-center mt-3">
+                <button id="allowLocation" type="button" class="btn btn-primary">Allow Location</button>
+            </div>
+        </form>
+        
+        <script>
+            document.getElementById("allowLocation").addEventListener("click", () => {
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        
+                        // Set the latitude and longitude as hidden form inputs
+                        const latitudeInput = document.createElement("input");
+                        latitudeInput.setAttribute("type", "hidden");
+                        latitudeInput.setAttribute("name", "latitude");
+                        latitudeInput.setAttribute("value", latitude);
+                        
+                        const longitudeInput = document.createElement("input");
+                        longitudeInput.setAttribute("type", "hidden");
+                        longitudeInput.setAttribute("name", "longitude");
+                        longitudeInput.setAttribute("value", longitude);
+                        
+                        // Append the inputs to the form and submit it
+                        const form = document.querySelector("form");
+                        form.appendChild(latitudeInput);
+                        form.appendChild(longitudeInput);
+                        form.submit();
+                    });
+                } else {
+                    alert("Geolocation is not supported in your browser.");
+                }
+            });
+        </script>
+        {% else %}
+        <div class="alert alert-info mt-4">
+            This short URL does not require accurate location tracking.
+        </div>
+        <div class="text-center mt-3">
+            <a href="{% url 'send_location' short_url.short_code %}" class="btn btn-primary">Proceed</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

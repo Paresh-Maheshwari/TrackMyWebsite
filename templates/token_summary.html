@@ -1,0 +1,75 @@
+<!-- token_summary.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="border rounded border-white bg-primary-gradient p-4 p-lg-5">
+      <form class="d-flex justify-content-center align-items-center flex-wrap flex-lg-nowrap" method="POST">
+        {% csrf_token %}
+        <div class="text-center text-lg-start pe-lg-3 py-3 py-lg-1">
+          <h2 class="fw-bold mb-0">Update Your Telegram Chat ID</h2>
+        </div>
+        <div class="my-2">
+          <input class="form-control" type="text" id="chat_id" name="chat_id" placeholder="{{ token_summary.chat_id }}" required>
+        </div>
+        <div class="my-2">
+          <span>&nbsp;&nbsp;</span> <!-- Non-breaking space -->
+          <button class="btn btn-primary shadow" type="submit">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<section class="py-4 py-xl-5">
+  <div class="container">
+    <div class="mx-auto" style="max-width: 900px;">
+      <div class="row row-cols-1 row-cols-md-2 d-flex justify-content-center">
+        <div class="col-md-10 col-lg-10 col-xl-10 mb-4">
+          <div class="card">
+            <pre id="code-block" class="card-body bg-info-light">
+&lt;script type="text/javascript" src="{{token_summary.link}}"&gt;&lt;/script&gt;</pre>
+            <button class="btn btn-info btn-sm" id="copy-button">Copy code to clipboard</button>
+          </div>
+          <br>
+          <div id="message"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.getElementById('copy-button').addEventListener('click', function() {
+    var codeBlock = document.getElementById('code-block');
+    var range = document.createRange();
+    range.selectNode(codeBlock);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+
+    try {
+      var successful = document.execCommand('copy');
+      var message = document.getElementById('message');
+      if (successful) {
+        message.innerHTML = '<p class="alert alert-success" role="alert">Code copied to clipboard!</p>';
+      } else {
+        message.innerHTML = '<p class="alert alert-danger" role="alert">Unable to copy code to clipboard.</p>';
+      }
+    } catch (err) {
+      console.error('Unable to copy', err);
+    }
+
+    window.getSelection().removeAllRanges();
+    setTimeout(function () {
+      message.innerHTML = '';
+    }, 2000);
+  });
+</script>
+
+{% endblock %}

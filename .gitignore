@@ -1,0 +1,28 @@
+# Ignore all venvs and virtual environments
+venv/
+.env
+
+
+# Ignore database files
+*.sqlite3
+*.db
+
+data
+*.pyc
+
+fake.py
+
+
+# Ignore compiled Python files
+__pycache__/
+
+# Ignore log files
+*.log
+
+# Ignore user-specific files (e.g., IDE-related files)
+.idea/
+.vscode/
+*.iml
+
+# Ignore migration files (you may or may not want to do this depending on your workflow)
+**/migrations/

@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  /* Custom CSS styles */
+  .hero-section {
+      background-color: #007bff; /* Change the background color */
+      color: #fff;
+      text-align: center;
+      padding: 100px 0;
+  }
+
+  .feature-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+  }
+
+  .feature-card:hover {
+      transform: translateY(-5px);
+  }
+  
+  /* Add custom styles for the feature icons */
+  .feature-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+  }
+
+  /* Custom style for call to action buttons */
+  .cta-buttons {
+      text-align: center;
+      margin-top: 20px;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+      .hero-section {
+          padding: 80px 0;
+      }
+  }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="container">
+      <h1 class="display-4">Welcome to Website Name</h1>
+      <p class="lead">Explore our features and functionalities below.</p>
+      <a href="#features" class="btn btn-primary btn-lg">Learn More</a>
+  </div>
+</div>
+
+<!-- Features Section -->
+<section id="features" class="py-5">
+  <div class="container">
+      <div class="row">
+          <!-- Feature Cards -->
+          <div class="col-md-4">
+              <div class="card feature-card mb-4">
+                  <div class="card-body text-center">
+                      <i class="fas fa-user-check feature-icon"></i>
+                      <h5 class="card-title">User Authentication</h5>
+                      <p class="card-text">Secure user authentication system.</p>
+                  </div>
+              </div>
+          </div>
+          <!-- Location Tracking -->
+          <div class="col-md-4">
+            <div class="card feature-card mb-4">
+                <div class="card-body text-center">
+                    <i class="fas fa-map-marker-alt feature-icon"></i>
+                    <h5 class="card-title">Location Tracking</h5>
+                    <p class="card-text">Track user locations in real-time.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Token Management -->
+        <div class="col-md-4">
+            <div class="card feature-card mb-4">
+                <div class="card-body text-center">
+                    <i class="fas fa-key feature-icon"></i>
+                    <h5 class="card-title">Token Management</h5>
+                    <p class="card-text">Generate and manage access tokens.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Analytics Dashboard -->
+        <div class="col-md-4">
+            <div class="card feature-card mb-4">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line feature-icon"></i>
+                    <h5 class="card-title">Analytics Dashboard</h5>
+                    <p class="card-text">View location data analytics.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Data Export -->
+        <div class="col-md-4">
+            <div class="card feature-card mb-4">
+                <div class="card-body text-center">
+                    <i class="fas fa-file-export feature-icon"></i>
+                    <h5 class="card-title">Data Export</h5>
+                    <p class="card-text">Export location data in various formats.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Alerts and Notifications -->
+        <div class="col-md-4">
+            <div class="card feature-card mb-4">
+                <div class="card-body text-center">
+                    <i class="fas fa-bell feature-icon"></i>
+                    <h5 class="card-title">Alerts and Notifications</h5>
+                    <p class="card-text">Receive alerts and notifications.</p>
+                </div>
+            </div>
+        </div>
+          <!-- Add more feature cards here -->
+      </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+{% if not user.is_authenticated %}
+<section class="bg-primary text-white py-5">
+  <div class="container">
+      <h2 class="display-4 text-center mb-4">Get Started Today</h2>
+      <p class="lead text-center">If you're a registered user, log in to access your account and start using our features. If you're new here, sign up to get started.</p>
+      <div class="cta-buttons">
+          <a href="/login" class="btn btn-light btn-lg mr-3">Log In</a>
+          <a href="/register" class="btn btn-success btn-lg">Sign Up</a>
+      </div>
+  </div>
+</section>
+{% endif %}
+<!-- About Us Section -->
+<section class="py-5">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-6">
+              <h2 class="display-4">About Us</h2>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ullamcorper velit id quam facilisis, in laoreet metus efficitur.</p>
+              <p>At Website Name, we are dedicated to providing the best services to our users. Our team of experts is passionate about delivering top-notch solutions that meet your needs.</p>
+          </div>
+          <div class="col-lg-6">
+              <img src="{% static 'images/about-us-image.jpg' %}" alt="About Us Image" class="img-fluid rounded">
+          </div>
+      </div>
+  </div>
+</section>
+
+
+{% endblock content %}

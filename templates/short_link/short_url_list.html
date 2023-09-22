@@ -1,0 +1,198 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <h1>Your Short URLs</h1>
+  <form method="get" action="{% url 'short_url_list' %}">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Search" name="search_query" value="{{ search_query }}">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </div>
+    </div>
+  </form>
+
+
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Short URL</th>
+          <th scope="col">Original URL</th>
+          <th scope="col">Creation Date</th>
+          <th scope="col">Actions</th>
+          <th scope="col">Edit</th>
+          <th scope="col">View Track Data</th>
+          <th scope="col">Analytics</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for short_url in page_obj %}
+        <tr>
+          <td>{{ page_obj.start_index|add:forloop.counter0 }}</td>
+          <td>
+            <a href="{{ server_address }}/{{ short_url.short_code }}"
+              >{{ server_address }}/{{ short_url.short_code }}</a
+            >
+          </td>
+          <td>
+            <a href="{{ short_url.original_url }}"
+              >{{ short_url.original_url }}</a
+            >
+          </td>
+          <td>{{ short_url.created_at }}</td>
+          <td>
+            <div class="btn-group" role="group">
+              <button
+                class="btn btn-info btn-sm copy-button"
+                data-clipboard="{{ server_address }}/{{ short_url.short_code }}"
+              >
+                <i class="fas fa-copy"></i> Copy
+              </button>
+              <button
+                class="btn btn-primary btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#qrCodeModal{{ short_url.id }}"
+                data-qrcode="{{ server_address }}/{{ short_url.short_code }}"
+              >
+                <i class="fas fa-qrcode"></i>
+             QR Code
+              </button>
+            </div>
+          </td>
+          <td>
+            <a
+              href="{% url 'edit_short_url' short_url.short_code %}"
+              class="btn btn-warning btn-sm"
+            >
+            <i class="fas fa-edit"></i>
+              Edit
+            </a>
+          </td>
+          <!-- Inside the table loop -->
+          <td>
+            <a
+              href="{% url 'user_location_list' short_url.short_code %}"
+              class="btn btn-success btn-sm"
+            >
+            <i class="fas fa-eye"></i>
+              View Track Data
+            </a>
+          </td>
+          <!-- End of inside the table loop -->
+          <!-- ANALAYYSIS  Modal -->
+          <td>
+            <a href="{% url 'analysis_view' short_url.short_code %}" class="btn btn-info btn-sm">
+              <i class="fas fa-chart-line"></i>
+              Analytics
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <!-- QR Code Modal -->
+          <td colspan="7">
+            <div
+              class="modal fade"
+              id="qrCodeModal{{ short_url.id }}"
+              tabindex="-1"
+              aria-labelledby="qrCodeModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="qrCodeModalLabel">QR Code</h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body text-center">
+                    <img
+                      src="{{ settings.SERVER_ADDRESS }}/generate_qr_code/{{ short_url.short_code }}"
+                      alt="QR Code"
+                      class="img-fluid"
+                    />
+                  </div>
+                  <div class="modal-footer">
+                    <a
+                      href="{{ settings.SERVER_ADDRESS }}/generate_qr_code/{{ short_url.short_code }}"
+                      download="qr_code.png"
+                      class="btn btn-primary"
+                      >Download QR Code</a
+                    >
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-md-12 text-center">
+    <div class="d-flex justify-content-center mt-3">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page=1">&laquo; First</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+              >Previous</a
+            >
+          </li>
+          {% endif %} 
+          {% for num in page_obj.paginator.page_range %}
+            {% if num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <li class="page-item{% if page_obj.number == num %} active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+              >Next</a
+            >
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}"
+              >Last &raquo;</a
+            >
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+</div>
+<script>
+  const copyButtons = document.querySelectorAll(".copy-button");
+  copyButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const shortUrl = button.getAttribute("data-clipboard");
+      const tempTextArea = document.createElement("textarea");
+      tempTextArea.value = shortUrl;
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempTextArea);
+      button.innerHTML = '<i class="fas fa-check"></i> Copied';
+      setTimeout(() => {
+        button.innerHTML = '<i class="fas fa-copy"></i> Copy';
+      }, 1000);
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,208 @@
+{% extends 'base.html' %} {% block content %}
+<style>
+  .custom-list-style li {
+    list-style: none; /* Remove default bullet */
+    text-align: left; /* Align text to the left */
+    margin-left: 0; /* Reset default left margin */
+    padding-left: 0; /* Reset default left padding */
+    margin-bottom: 0.5rem; /* Add some spacing between list items */
+  }
+</style>
+<div class="container mt-4">
+  <h1 class="mb-4">Track Data for Short URL: {{ short_url.short_code }}</h1>
+  <!-- Search Form -->
+  
+
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Time</th>
+          <th scope="col">IP Address</th>
+          <th scope="col">Country</th>
+          <th scope="col">City</th>
+          <th scope="col">User Agent</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user_location in page_obj %}
+        <tr>
+          <td>{{ user_location.date }}</td>
+          <td>{{ user_location.time }}</td>
+          <td>{{ user_location.ip_address }}</td>
+          <td>{{ user_location.country }}</td>
+          <td>{{ user_location.city }}</td>
+          <td>{{ user_location.user_agent }}</td>
+          <td>
+            <button
+              class="btn btn-info btn-sm more-info-button"
+              data-bs-toggle="modal"
+              data-bs-target="#moreInfoModal{{ user_location.id }}"
+            >
+              More Info
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+<!-- Display pagination controls --><div class="d-flex justify-content-center mt-3">
+  <div class="col-md-12 text-center">
+    <div class="d-flex justify-content-center mt-3">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page=1">&laquo; First</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+              >Previous</a
+            >
+          </li>
+          {% endif %} 
+          {% for num in page_obj.paginator.page_range %}
+            {% if num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <li class="page-item{% if page_obj.number == num %} active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+              >Next</a
+            >
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}"
+              >Last &raquo;</a
+            >
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+
+
+
+{% for user_location in user_locations %}
+<!-- More Info Modal -->
+<div
+  class="modal fade"
+  id="moreInfoModal{{ user_location.id }}"
+  tabindex="-1"
+  aria-labelledby="moreInfoModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="moreInfoModalLabel">More Info</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="container mt-4">
+  <div class="row">
+    <div class="rounded float-start">
+      {{ map_html|safe }}
+    </div>
+    <div >
+      <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="mb-0">Location Details</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-unstyled custom-list-style">
+              <li><strong>Country:</strong> {{ user_location.country }}</li>
+              <li><strong>City:</strong> {{ user_location.city }}</li>
+              <li><strong>Region:</strong> {{ user_location.region }}</li>
+              <li><strong>Region Name:</strong> {{ user_location.region_name }}</li>
+              <li><strong>District:</strong> {{ user_location.district }}</li>
+              <li><strong>Zip Code:</strong> {{ user_location.zip_code }}</li>
+              <li><strong>Timezone:</strong> {{ user_location.timezone }}</li>
+            </ul>
+          </div>
+        </div>
+      
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="mb-0">AS Information</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-unstyled custom-list-style">
+              <li><strong>AS Number:</strong> {{ user_location.as_number }}</li>
+              <li><strong>AS Name:</strong> {{ user_location.as_name }}</li>
+            </ul>
+          </div>
+        </div>
+      
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="mb-0">Other Details</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-unstyled custom-list-style">
+              <li><strong>IP Address:</strong> {{ user_location.ip_address }}</li>
+              <li><strong>ISP:</strong> {{ user_location.isp }}</li>
+              <li><strong>Organization:</strong> {{ user_location.org }}</li>
+              <li><strong>Mobile:</strong> {{ user_location.mobile }}</li>
+              <li><strong>Proxy:</strong> {{ user_location.proxy }}</li>
+              <li><strong>Hosting:</strong> {{ user_location.hosting }}</li>
+              <li><strong>Date:</strong> {{ user_location.date }}</li>
+              <li><strong>Time:</strong> {{ user_location.time }}</li>
+              <li><strong>User Agent:</strong> {{ user_location.user_agent }}</li>
+              <li><strong>Browser Family:</strong> {{ user_location.user_agent_browser_family }}</li>
+              <li><strong>Browser Version:</strong> {{ user_location.user_agent_browser_version }}</li>
+              <li><strong>Operating System:</strong> {{ user_location.user_agent_os }}</li>
+              <li><strong>Device:</strong> {{ user_location.user_agent_device }}</li>
+              <li><strong>Mobile Device:</strong> {{ user_location.is_mobile }}</li>
+              <li><strong>Tablet Device:</strong> {{ user_location.is_tablet }}</li>
+              <li><strong>PC:</strong> {{ user_location.is_pc }}</li>
+              <li><strong>Bot:</strong> {{ user_location.is_bot }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+      <div class="modal-footer">
+        <a href="{% url 'copy_to_clipboard' short_url.short_code user_location.id %}" class="btn btn-primary">Download Data</a>
+
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+{% endfor %}
+
+<script>
+  const qrCodeModals = document.querySelectorAll(".modal");
+
+  qrCodeModals.forEach((modal) => {
+    modal.addEventListener("hidden.bs.modal", () => {
+      const backdrop = document.querySelector(".modal-backdrop");
+      if (backdrop) {
+        backdrop.remove();
+      }
+    });
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h1>Create Short URL</h1>
+  <form method="post">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+      <label for="{{ form.original_url.id_for_label }}" class="form-label">Original URL:</label>
+      <input type="url" class="form-control" id="{{ form.original_url.id_for_label }}" name="{{ form.original_url.name }}">
+    </div>
+
+    <div class="mb-3">
+      <label for="{{ form.custom_short_code.id_for_label }}" class="form-label">Custom Shortcode (optional):</label>
+      <input type="text" class="form-control" id="{{ form.custom_short_code.id_for_label }}" name="{{ form.custom_short_code.name }}">
+    </div>
+
+    <div class="mb-3">
+      <label for="{{ form.extension.id_for_label }}" class="form-label">Extension (optional):</label>
+      <select class="form-select" id="{{ form.extension.id_for_label }}" name="{{ form.extension.name }}">
+        <option value="" selected>No extension</option>
+        <option value=".gif">.gif</option>
+        <option value=".jpg">.jpg</option>
+        <option value=".jpeg">.jpeg</option>
+        <option value=".png">.png</option>
+        <option value=".lnk">.lnk</option>
+        <option value=".link">.link</option>
+        <option value=".txt">.txt</option>
+        <option value=".html">.html</option>
+        <option value=".js">.js</option>
+        <option value=".exe">.exe</option>
+        <option value=".ext">.ext</option>
+        <option value=".pdf">.pdf</option>
+        <option value=".psd">.psd</option>
+        <option value=".csv">.csv</option>
+        <option value=".mp3">.mp3</option>
+        <option value=".mp4">.mp4</option>
+        <option value=".wma">.wma</option>
+        <option value=".avi">.avi</option>
+        <option value=".apk">.apk</option>
+        <option value=".jar">.jar</option>
+        <option value=".ico">.ico</option>
+        <option value=".json">.json</option>
+        <option value=".iso">.iso</option>
+        <option value=".zip">.zip</option>
+        <option value=".rar">.rar</option>
+        <option value=".tgz">.tgz</option>
+        <option value=".tar">.tar</option>
+        <option value=".gz">.gz</option>
+        <option value=".torrent">.torrent</option>
+      </select>
+    </div>
+    
+    
+    <div class="mb-3">
+      <label for="{{ form.expiry_date.id_for_label }}" class="form-label">Link Expiry Date (YYYY-MM-DDTHH:mm):</label>
+      <input type="datetime-local" class="form-control" id="{{ form.expiry_date.id_for_label }}" name="{{ form.expiry_date.name }}" min="{{ current_datetime }}">
+    </div>
+    
+    <div class="mb-3">
+      <label for="password" class="form-label">Password (optional):</label>
+      <input type="password" class="form-control" id="password" name="password">
+    </div>
+
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" id="enableLocation" name="{{ form.accurate_location_tracking.name }}">
+      <label class="form-check-label" for="enableLocation">Enable Accurate Location Tracking</label>
+  </div>
+  
+
+    <div class="mb-3">
+      <label for="{{ form.custom_note.id_for_label }}" class="form-label">Custom Note:</label>
+      <textarea class="form-control" id="{{ form.custom_note.id_for_label }}" name="{{ form.custom_note.name }}"
+                rows="4" placeholder="Add a custom note to remember"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Short URL</button>
+    <script>
+      // Get the current date and time in YYYY-MM-DDTHH:mm format
+      const now = new Date();
+      const current_datetime = now.toISOString().slice(0, 16);
+    
+      // Set the min attribute of the expiry date input to prevent selecting past dates
+      document.getElementById("{{ form.expiry_date.id_for_label }}").setAttribute("min", current_datetime);
+    </script>
+  </form>
+</div>
+{% endblock %}
