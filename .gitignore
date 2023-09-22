@@ -25,4 +25,3 @@ __pycache__/
 *.iml
 
 # Ignore migration files (you may or may not want to do this depending on your workflow)
-**/migrations/
