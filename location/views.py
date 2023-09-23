@@ -257,15 +257,16 @@ def token_summary(request):
 
     # Check if the user has submitted a chat ID
     if TokenSummary.objects.filter(author=request.user).exists():
-    # If the user has submitted a chat ID, show the current chat ID
+        # If the user has submitted a chat ID, show the current chat ID
         token_summary = TokenSummary.objects.filter(author=request.user).first()
+        chat_id = token_summary.chat_id
     else:
         # If the user has not submitted a chat ID, show an empty string
-        token_summary = ""
+        chat_id = ""
     
     # Add the SERVER_ADDRESS environment variable to the context dictionary
     context = {
-        "chat_id": token_summary.chat_id,
+        "chat_id": chat_id,
         'token_summary': token_summary,
         'tokens': tokens,
         'SERVER_ADDRESS': os.environ['SERVER_ADDRESS'],
