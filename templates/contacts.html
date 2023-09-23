@@ -13,7 +13,7 @@
       <div class="row d-flex justify-content-center">
         <div class="col-md-6 col-xl-4">
           <div>
-            <form class="p-3 p-xl-4" method="post">
+            <form class="p-3 p-xl-4" method="post" id="contactForm">
               {% csrf_token %}              
               <div class="mb-3"><input class="form-control" type="text" id="name" name="name" placeholder="Name" required>
               </div>
@@ -21,7 +21,26 @@
               </div>
               <div class="mb-3"><textarea class="form-control" id="message" name="message" rows="6"
                   placeholder="Message" maxlength="250" required ></textarea></div>
-              <div><button class="btn btn-primary shadow d-block w-100" type="submit">Send </button></div>
+              <div>
+                <button class="btn btn-primary shadow d-block w-100" type="submit" data-bs-toggle="modal" data-bs-target="#customDialog" >Send </button>
+              </div>
+              <div class="modal fade" id="customDialog" tabindex="-1" aria-labelledby="customDialogLabel" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="customDialogLabel">Success!</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      Message sent successfully to admin. Admin will reply as soon as possible.
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
             </form>
           </div>
         </div>
@@ -83,5 +102,13 @@
         </div>
       </div>
     </div>
+    <script>
+      document.getElementById("contactForm").addEventListener("submit", function(event) {
+        // Allow the form to submit to the Django backend
+        var customDialog = new bootstrap.Modal(document.getElementById("customDialog"));
+        customDialog.show();
+      });
+    </script>
+    
   </section>
 {% endblock %}
