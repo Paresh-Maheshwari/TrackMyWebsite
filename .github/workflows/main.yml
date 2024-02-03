@@ -10,23 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Trivy
-        run: |
-          TRIVY_VERSION=$(curl -s https://api.github.com/repos/aquasecurity/trivy/releases/latest | grep "tag_name" | cut -d '"' -f 4)
-          wget "https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}/trivy_${TRIVY_VERSION#v}_Linux-64bit.tar.gz"
-          tar zxvf "trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
-          sudo mv trivy /usr/local/bin/
-          trivy --version
-
-      - name: Scan Repository
-        run: |
-          trivy filesystem -f json -o trivy_results.json .
-
-      - name: Upload Trivy Results
-        uses: actions/upload-artifact@v2
-        with:
-          name: trivy-results
-          path: trivy_results.json
+      - name: Aqua Security Trivy
+        uses: aquasecurity/trivy-action@0.16.1
+            
