@@ -16,7 +16,7 @@ jobs:
       - name: Set up Trivy
         run: |
           TRIVY_VERSION=$(curl -s https://api.github.com/repos/aquasecurity/trivy/releases/latest | grep "tag_name" | cut -d '"' -f 4)
-          wget "https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
+          wget "https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}/trivy_v${TRIVY_VERSION}_Linux-64bit.tar.gz"
           tar zxvf "trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
           sudo mv trivy /usr/local/bin/
           trivy --version
