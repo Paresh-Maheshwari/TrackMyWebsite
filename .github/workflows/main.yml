@@ -1,27 +1,32 @@
-name: build
+# trivy_scan.yml
+
 on:
   push:
-    branches:
-      - main
-  pull_request:
+    paths:
+      - '**/*' # Trigger on any file change
+
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-20.04
+  trivy_scan:
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - name: Run Trivy vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          ignore-unfixed: true
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL'
+      - name: Set up Trivy
+        run: |
+          TRIVY_VERSION=$(curl -s https://api.github.com/repos/aquasecurity/trivy/releases/latest | grep "tag_name" | cut -d '"' -f 4)
+          wget "https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
+          tar zxvf "trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
+          sudo mv trivy /usr/local/bin/
+          trivy --version
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+      - name: Scan Repository
+        run: |
+          trivy filesystem -f json -o trivy_results.json .
+
+      - name: Upload Trivy Results
+        uses: actions/upload-artifact@v2
         with:
-          sarif_file: 'trivy-results.sarif'
+          name: trivy-results
+          path: trivy_results.json
