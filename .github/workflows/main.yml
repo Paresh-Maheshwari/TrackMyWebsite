@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-
 jobs:
   build:
     name: build
@@ -25,9 +24,9 @@ jobs:
           output: 'trivy-results.sarif'
           severity: 'CRITICAL'
 
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+      - name: Send Trivy results to Telegram
+        uses: appleboy/telegram-action@master
         with:
-          sarif_file: 'trivy-results.sarif'
-          category: 'code'
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: "Trivy scan results: ${{ github.repository }}/actions/runs/${{ github.run_id }}"
